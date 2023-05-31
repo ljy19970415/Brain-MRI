@@ -1,0 +1,70 @@
+train_file: '/home/ps/leijiayu/CODE/MedKLIP/Pretrain_MedKLIP_bce/data_file_kad/train_data_path.json'
+valid_file: '/home/ps/leijiayu/CODE/MedKLIP/Pretrain_MedKLIP_bce/data_file_kad/val_data_path.json'
+test_file: '/home/ps/leijiayu/CODE/MedKLIP/Pretrain_MedKLIP_bce/data_file_kad/test_data_path.json'
+label_file: '/home/ps/leijiayu/CODE/MedKLIP/Pretrain_MedKLIP_bce/data_file_kad/label.npy'
+disease_book: '/home/ps/leijiayu/CODE/MedKLIP/Pretrain_MedKLIP_bce/data_file_kad/dis_description.json'
+disease_order: '/home/ps/leijiayu/CODE/MedKLIP/Pretrain_MedKLIP_bce/data_file_kad/dis_order.json'
+anatomy_order: '/home/ps/leijiayu/CODE/MedKLIP/Pretrain_MedKLIP_bce/data_file_kad/anatomy_order.json'
+report_observe: '/home/ps/leijiayu/CODE/MedKLIP/Pretrain_MedKLIP_bce/data_file_kad/report_observe.npy'
+
+4_image_encoder: False
+seperate_classifier: True
+attention: False
+kad: True
+kad_loss_ratio: 1
+
+la: False
+la_alpha: 1
+class_p: '/home/ps/leijiayu/CODE/MedKLIP/Pretrain_MedKLIP/data_file/class_p.json'
+
+num_classes: 14
+model_depth: 34
+pretrain_path: '/home/ps/leijiayu/CODE/MedKLIP/Pretrain_MedKLIP/models/pretrained_weights/resnet_34.pth'
+
+image_res: 224
+patch_size: 16
+num_sentences: 12
+num_tokens: 32
+vision_width: 768
+fea_width: 197
+# embed_dim: 256
+batch_size: 32
+test_batch_size: 32
+temp: 0.07
+mlm_probability: 0.15
+queue_size: 8192
+momentum: 0.995
+alpha: 0.4
+
+res_base_model: 'resnet34'
+num_queries: 75
+dropout: 0.1
+attribute_set_size: 1
+N: 4
+H: 4 
+no_cl: False
+exclude_class: False
+# text_encoder: 'emilyalsentzer/Bio_ClinicalBERT'
+text_encoder: 'xmcmic/Med-KEBERT'
+shuffle_ratio: 0.5
+optimizer: {opt: adamW, lr: 1e-4, weight_decay: 0.02}
+schedular: {sched: cosine, lr: 1e-4, epochs: 100, min_lr: 1e-5, decay_rate: 1, warmup_lr: 1e-5, warmup_epochs: 5, cooldown_epochs: 0}
+
+model_type: 'resnet' 
+
+input_W: 224
+input_H: 224
+input_D: 16
+resnet_shortcut: 'B'
+no_cuda: False
+gpu_id: [0]
+out_feature: 768
+d_model: 768
+in_channels: 1
+conv1_t_size: 7
+conv1_t_stride: 1
+no_max_pool: False
+
+
+
+
