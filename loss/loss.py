@@ -143,6 +143,7 @@ class ClipLoss(nn.Module):
         # image_features 4 b d
         # text_features 4 b d
         # labels 4 b b
+        # print("len image features",len(image_features),len(text_features),image_features[0].shape, text_features[0].shape)
         logit_scale = nn.Parameter(torch.ones([]) * np.log(1 / 0.07))
         device = image_features[0].device
         # if self.world_size > 1:
@@ -159,9 +160,11 @@ class ClipLoss(nn.Module):
         # else:
         total_loss = None
         for i in range(len(image_features)):
+            cur_text_feature = text_features[i] if i<len(text_features) else text_features[-1]
+            cur_label = labels[i] if i<len(labels) else labels[-1]
             # print("img.shape",image_features[i].shape,text_features[i].shape,labels[i].shape)
-            logits_per_image = logit_scale * image_features[i] @ text_features[i].T
-            logits_per_text = logit_scale * text_features[i] @ image_features[i].T
+            logits_per_image = logit_scale * image_features[i] @ cur_text_feature.T
+            logits_per_text = logit_scale * cur_text_feature @ image_features[i].T
             
             # logits_per_image b b logits_per_text b b
             # calculated ground-truth and cache if enabled
@@ -169,8 +172,8 @@ class ClipLoss(nn.Module):
             # labels = torch.eye(num_logits, device=device, dtype=torch.float) # 对角线为1其余为0
             pred_1 = F.log_softmax(logits_per_image,dim=-1) # 对最后一个维度先做softmax后做log
             pred_2 = F.log_softmax(logits_per_text,dim=-1)
-            loss_a = F.kl_div(pred_1, labels[i], reduction = 'sum')/num_logits
-            loss_b = F.kl_div(pred_2, labels[i], reduction = 'sum')/num_logits
+            loss_a = F.kl_div(pred_1, cur_label, reduction = 'sum')/num_logits
+            loss_b = F.kl_div(pred_2, cur_label, reduction = 'sum')/num_logits
             if total_loss is None:
                 total_loss = (loss_a + loss_b)/2
             else:

@@ -2,10 +2,10 @@ import torch.nn as nn
 import torch
 
 class beforeFuse(nn.Module):
-    def __init__(self, config, mode='train'):
+    def __init__(self, config, number=4):
         super(beforeFuse, self).__init__()
         self.d_model = config['d_model']
-        self.res_linear1=nn.Linear(self.d_model*4, self.d_model)
+        self.res_linear1=nn.Linear(self.d_model*number, self.d_model)
         self.res_linear2=nn.Linear(self.d_model, self.d_model)
         self.apply(self._init_weights)
 
@@ -13,7 +13,8 @@ class beforeFuse(nn.Module):
         out_feature=torch.cat(features,dim=2) # b,p,768*4
         out_feature=self.res_linear1(out_feature) 
         out_feature=self.res_linear2(out_feature)# b,p,768
-        return out_feature
+        out_pool = torch.mean(out_feature,dim=1)
+        return out_feature, out_pool
 
     @staticmethod
     def _init_weights(module):

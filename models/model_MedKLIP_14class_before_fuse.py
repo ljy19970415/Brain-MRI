@@ -142,7 +142,10 @@ class MedKLIP(nn.Module):
             logits = logits + class_p
         logits = torch.sigmoid(logits)
 
-        return logits, ll, cl_labels
+        if self.config['no_cl'] == False:
+            return logits, ll, cl_labels
+        else:
+            return logits
 
     @staticmethod
     def _init_weights(module):

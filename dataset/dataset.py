@@ -57,6 +57,8 @@ class MedKLIP_Dataset(Dataset):
                 report_entity.append(modal+' '+self.report[fid][modal][0])
             else:
                 report_entity.append('[SEP]'.join(self.report[fid][modal]))
+        if 'fuse' in self.report[fid]:
+            entity.append('[SEP]'.join(self.report[fid]['fuse']))
         
         # img_path = self.img_path_list[index]
         class_label = self.rad_graph_results[self.ann[fid]["labels_id"],:,:] # (51, 75)
